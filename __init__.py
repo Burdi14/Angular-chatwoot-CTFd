@@ -2,7 +2,9 @@ import re
 from uuid import uuid4
 from flask import make_response, render_template
 import requests
+from CTFd.cli import get_config
 from CTFd.models import db
+from CTFd.plugins import register_plugin_assets_directory
 from CTFd.utils.user import get_current_user
 from CTFd.plugins.migrations import upgrade
 
@@ -14,38 +16,11 @@ class TicketRef(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = db.relationship("Users", foreign_keys="TicketRef.user_id", lazy="select")
 
-    source_id = db.Column(db.String(40), nullable=False)
-    session = db.Column(db.String(400), nullable=False)
+    token = db.Column(db.String(400), nullable=False)
 
-CONTENT = """
-<!-- <button class="btn btn-success" onclick="run_window()">Run</button> -->
-<script>
-    window.chatwootSettings = {"hideMessageBubble": true};
-    (function(d,t) {
-        var BASE_URL="https://burdi.ru";
-        var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-        g.src=BASE_URL+"/packs/js/sdk.js";
-        g.async = true;
-        s.parentNode.insertBefore(g,s);
-        g.onload=function(){
-            window.chatwootSDK.run({
-            websiteToken: 'ko4mkL7B5Fgkd6HRPLR34X8b',
-            baseUrl: BASE_URL
-            })
-            window.$chatwoot.toggle('open');
-        }
-    })(document,"script");
-    
-    // function run_window() {
-    //     window.$chatwoot.toggle('open');
-    // }
-</script>
-"""
 
-CHATWOOT_HOST = "https://burdi.ru"
-# ACCOUNT_ID = 2
-# TOKEN = "aN8zpwSx2foSQetxHUGrLDSz"
-# INBOX_ID = 1
+CHATWOOT_HOST = "https://chatwoot.burdi.ru"
+CHATWOOT_WEBSITE_TOKEN = "ko4mkL7B5Fgkd6HRPLR34X8b"
 
 # example
 # curl 'https://burdi.ru/api/v1/widget/contact?website_token=ko4mkL7B5Fgkd6HRPLR34X8b' \
@@ -65,42 +40,51 @@ CHATWOOT_HOST = "https://burdi.ru"
 #   -H 'sec-ch-ua-mobile: ?0' \
 #   -H 'sec-ch-ua-platform: "Windows"'
 
-def create_ticket():
-    sess = requests.Session()
-    r = sess.get(
-        f"{CHATWOOT_HOST}/widget?website_token=ko4mkL7B5Fgkd6HRPLR34X8b",
-    )
-    token = re.search(r"window\.authToken = '([^']+)'", r.text).group(1)
-    return (token, r.cookies.get("_chatwoot_session"))
-
 
 def load(app):
     app.db.create_all()
 
+    def create_ticket():
+        sess = requests.Session()
+        r = sess.get(
+            f"{CHATWOOT_HOST}/widget?website_token=ko4mkL7B5Fgkd6HRPLR34X8b",
+        )
+
+        token = re.search(r"authToken = '([^']+)'", r.text).group(1)
+        return token
+
     @app.route('/chat', methods=['GET'])
     def view_chat():
+        TEMPLATE = 'plugins/chatwoot/assets/chat.html'
+
         user = get_current_user()
+        team = user.team if user is not None else None
 
         if user is None:
-            return render_template('page.html', content="Please log in.")
+            return render_template(TEMPLATE, user=user)
 
-        ticket_ref = TicketRef.query.filter_by(user_id=user.id).first() if user else None
+        # find tickets belonging to a user which has the same team
+        filter_query = TicketRef.user.has(team_id=team.id) if team is not None else TicketRef.user == user
+        ticket_refs = TicketRef.query.filter(filter_query).all()
+
+        ticket_ref = ticket_refs[0] if ticket_refs else None
 
         if ticket_ref is None:
-            token, session = create_ticket()
+            token = create_ticket()
             ticket_ref = TicketRef(
-                user_id=user.id,
-                source_id=token,
-                session=session
+                user=user,
+                token=token
             )
             db.session.add(ticket_ref)
             db.session.commit()
 
-        response = make_response(render_template('page.html', content=CONTENT))
+        response = make_response(render_template(TEMPLATE, user=user, chatwoot_host=CHATWOOT_HOST, chatwoot_website_token=CHATWOOT_WEBSITE_TOKEN))
 
-        response.set_cookie('cw_conversation', ticket_ref.source_id)
-        response.set_cookie('_chatwoot_session', ticket_ref.session)
+        response.set_cookie('cw_conversation', ticket_ref.token)
 
         return response
 
     upgrade(plugin_name="chatwoot")
+    register_plugin_assets_directory(
+        app, base_path="/plugins/chatwoot/assets/"
+    )

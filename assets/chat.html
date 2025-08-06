@@ -1,0 +1,34 @@
+{% extends "page.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Chat with Support</h1>
+            {% if user %}
+                <p>Welcome, {{ user.name }}!</p>
+                <script>
+                    window.chatwootSettings = {"hideMessageBubble": true};
+                    (function(d,t) {
+                        var BASE_URL="{{ chatwoot_host }}";
+                        var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+                        g.src=BASE_URL+"/packs/js/sdk.js";
+                        g.async = true;
+                        s.parentNode.insertBefore(g,s);
+                        g.onload=function(){
+                            window.chatwootSDK.run({
+                                websiteToken: '{{ chatwoot_website_token }}',
+                                baseUrl: BASE_URL
+                            })
+                            window.$chatwoot.toggle('open');
+                            document.getElementById("chatwoot_live_chat_widget").contentWindow.postMessage(`chatwoot-widget:${JSON.stringify({ event: "toggle-open", isOpen: true})}`, '*')
+                        }
+                    })(document,"script");
+                </script>
+            {% else %}
+                <p>Please <a href="{{ url_for('auth.register') }}">register</a> or <a href="{{ url_for('auth.login') }}">log in</a> first to chat with support.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
