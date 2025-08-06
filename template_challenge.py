@@ -72,18 +72,21 @@ CHALLENGE_CONTENT = '''
               {% block attribution %}{{ challenge.byline }}{% endblock %}
             </small>
 
-            <div class="d-flex flex-wrap align-items-start gap-3 mb-3">
-            <div>
+            <div class="row align-items-start mb-3">
+            <div class="col-12 col-sm-8">
+              <span class="challenge-desc d-block">
+                {% block description %}{{ challenge.html }}{% endblock %}
+              </span>
+            </div>
+
+            <div class="col-12 col-sm-4 mt-3 mt-sm-0">
               <button
                 id="make-ticket-btn"
-                class="btn btn-outline-info"
+                class="btn btn-outline-info w-100"
                 type="button"
               >
-                Make Ticket
+                Ask question
               </button>
-            </div>
-            <div class="flex-fill">
-              <span class="challenge-desc">{% block description %}{{ challenge.html }}{% endblock %}</span>
             </div>
           </div>
 
@@ -159,17 +162,6 @@ CHALLENGE_CONTENT = '''
                 <span x-text="attempts"></span>/<span x-text="max_attempts"></span> {% trans c=max_attempts %}attempt{% pluralize %}attempts{% endtrans %}
               </p>
             </template>
-            <div class="row mt-4">
-              <div class="col-12 col-sm-4 offset-sm-8">
-                <button
-                  id="make-ticket-btn"
-                  class="btn btn-outline-info w-100"
-                  type="button"
-                >
-                  Ask question
-                </button>
-              </div>
-            </div>
             <div class="row submit-row">
               <div class="col-12 col-sm-8">
                 {% block input %}
