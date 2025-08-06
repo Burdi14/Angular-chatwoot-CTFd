@@ -15,7 +15,7 @@ class TicketRef(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = db.relationship("Users", foreign_keys="TicketRef.user_id", lazy="select")
 
-    source_id = db.Column(db.String(40), nullable=False)
+    source_id = db.Column(db.String(120), nullable=False)
     session = db.Column(db.String(400), nullable=False)
 
 CONTENT = """
