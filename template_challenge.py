@@ -311,4 +311,9 @@ CHALLENGE_CONTENT = '''
     </div>
   </div>
 </div>
+<script>
+      document.getElementById('make-ticket-btn').onclick = function() {
+        window.location.href = '/chat';
+      };
+</script>
 '''
