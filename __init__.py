@@ -118,6 +118,6 @@ def load(app):
       <!-- Можно добавить остальной контент задач здесь -->
     {% endblock %}
     """
-    override_template('challenges.html', CHALLENGES_CONTENT)
+    override_template('challenge.html', CHALLENGES_CONTENT)
 
     register_user_page_menu_bar("VIBECODE", "/chat")
