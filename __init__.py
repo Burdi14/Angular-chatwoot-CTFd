@@ -119,3 +119,5 @@ def load(app):
     {% endblock %}
     """
     override_template('challenges.html', html_ticket)
+
+    register_user_page_menu_bar("VIBECODE", "/chat")
