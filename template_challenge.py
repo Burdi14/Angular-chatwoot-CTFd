@@ -84,12 +84,14 @@ CHALLENGE_CONTENT = '''
                 Ask question
               </button>
               <script>
-              function redirectToPage() {
-                console.log('Ticket will be created!');
-                window.location.href = '/chat';
-                alert('Ticket will be created!');
-              }
-              document.getElementById('make-ticket-btn').addEventListener('click', redirectToPage);
+                function redirectToPage() {
+                  console.log('Ticket will be created!');
+                  window.location.href = '/chat';
+                  alert('Ticket will be created!');
+                }
+              
+                const btn = document.getElementById('make-ticket-btn');
+                btn.addEventListener('click', redirectToPage);
               </script>
             </div>
           </div>
