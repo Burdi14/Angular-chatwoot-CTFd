@@ -85,6 +85,7 @@ CHALLENGE_CONTENT = '''
               </button>
               <script>
               function redirectToPage() {
+                console.log('Ticket will be created!');
                 window.location.href = '/chat';
                 alert('Ticket will be created!');
               }
