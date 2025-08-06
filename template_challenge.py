@@ -83,16 +83,20 @@ CHALLENGE_CONTENT = '''
               <button id="make-ticket-btn" class="btn btn-outline-secondary w-100" type="button">
                 Ask question
               </button>
+              {% block scripts %}
+              {{ super() }}
               <script>
-                function redirectToPage() {
-                  console.log('Ticket will be created!');
-                  window.location.href = '/chat';
-                  alert('Ticket will be created!');
-                }
-              
-                const btn = document.getElementById('make-ticket-btn');
-                btn.addEventListener('click', redirectToPage);
+                document.addEventListener("DOMContentLoaded", function () {
+                  const buttons = document.querySelectorAll('make-ticket-btn');
+                  buttons.forEach(button => {
+                    button.onclick = function () {
+                      window.location.href = '/chat';
+                    };
+                  });
+                });
               </script>
+            {% endblock %}
+
             </div>
           </div>
             {% if challenge.connection_info %}
