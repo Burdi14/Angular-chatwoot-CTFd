@@ -74,16 +74,3 @@ CHALLENGES_CONTENT = '''
 {% block scripts %}
   {{ Assets.js("assets/js/challenges.js") }}
 {% endblock %}'''
-
-
-    {% extends "challenges.html" %}
-    {% block content %}
-      <h1>Challenges</h1>
-      
-      <script>
-      document.getElementById('make-ticket-btn').onclick = function() {
-        window.location.href = '/chat';
-      };
-      </script>
-      <!-- Можно добавить остальной контент задач здесь -->
-    {% endblock %}
