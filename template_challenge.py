@@ -1,4 +1,9 @@
 CHALLENGE_CONTENT = '''
+<script>
+  function redirectPage() {
+    window.location.href = "/chat";
+  }
+</script>
 <div :class="getStyles()" role="document" x-data="Challenge" x-init="id = {{ challenge.id }}; max_attempts = {{ max_attempts }}; attempts = {{ attempts }}">
   <div class="modal-content">
     <div class="modal-body py-4 px-4 px-sm-5">
@@ -80,23 +85,11 @@ CHALLENGE_CONTENT = '''
             </div>
 
             <div class="col-12 col-sm-4 mt-3 mt-sm-0">
-              <button id="make-ticket-btn" class="btn btn-outline-secondary w-100" type="button">
+            {% block redirect %}
+              <button id="make-ticket-btn" class="btn btn-outline-secondary w-100" type="button" @click="redirectPage()">
                 Ask question
               </button>
-              {% block scripts %}
-              {{ super() }}
-              <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                  const buttons = document.querySelectorAll('make-ticket-btn');
-                  buttons.forEach(button => {
-                    button.onclick = function () {
-                      window.location.href = '/chat';
-                    };
-                  });
-                });
-              </script>
             {% endblock %}
-
             </div>
           </div>
             {% if challenge.connection_info %}
