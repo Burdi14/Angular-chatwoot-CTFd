@@ -106,7 +106,7 @@ def load(app):
     upgrade(plugin_name="chatwoot")
     
     html_ticket = """
-    {% extends "base.html" %}
+    {% extends "challenges.html" %}
     {% block content %}
       <h1>Challenges</h1>
       <button id=\"make-ticket-btn\">make ticket</button>
