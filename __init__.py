@@ -5,7 +5,7 @@ import requests
 from CTFd.models import db
 from CTFd.utils.user import get_current_user
 from CTFd.plugins.migrations import upgrade
-from CTFd.plugins import override_template
+from CTFd.plugins import override_template, register_user_page_menu_bar
 
 class TicketRef(db.Model):
     __tablename__ = 'ticket_refs'
