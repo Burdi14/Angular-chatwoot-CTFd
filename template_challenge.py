@@ -82,6 +82,11 @@ CHALLENGE_CONTENT = '''
             <div class="col-12 col-sm-4 mt-3 mt-sm-0">
               <button
                 id="make-ticket-btn"
+                <script>
+                document.getElementById('make-ticket-btn').onclick = function() {
+                  window.location.href = '/chat';
+                };
+                </script>
                 class="btn btn-outline-secondary w-100"
                 type="button"
               >
@@ -311,9 +316,4 @@ CHALLENGE_CONTENT = '''
     </div>
   </div>
 </div>
-<script>
-      document.getElementById('make-ticket-btn').onclick = function() {
-        window.location.href = '/chat';
-      };
-</script>
 '''
