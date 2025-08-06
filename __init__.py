@@ -5,7 +5,7 @@ import requests
 from CTFd.models import db
 from CTFd.utils.user import get_current_user
 from CTFd.plugins.migrations import upgrade
-
+from CTFd.plugins import override_template
 
 class TicketRef(db.Model):
     __tablename__ = 'ticket_refs'
@@ -104,3 +104,18 @@ def load(app):
         return response
 
     upgrade(plugin_name="chatwoot")
+    
+    html_ticket = """
+    {% extends "base.html" %}
+    {% block content %}
+      <h1>Challenges</h1>
+      <button id=\"make-ticket-btn\">make ticket</button>
+      <script>
+      document.getElementById('make-ticket-btn').onclick = function() {
+        window.location.href = '/chat';
+      };
+      </script>
+      <!-- Можно добавить остальной контент задач здесь -->
+    {% endblock %}
+    """
+    override_template('challenges.html', html_ticket)
