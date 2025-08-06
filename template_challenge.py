@@ -72,7 +72,20 @@ CHALLENGE_CONTENT = '''
               {% block attribution %}{{ challenge.byline }}{% endblock %}
             </small>
 
-            <span class="challenge-desc">{% block description %}{{ challenge.html }}{% endblock %}</span>
+            <div class="d-flex flex-wrap align-items-start gap-3 mb-3">
+            <div>
+              <button
+                id="make-ticket-btn"
+                class="btn btn-outline-info"
+                type="button"
+              >
+                Make Ticket
+              </button>
+            </div>
+            <div class="flex-fill">
+              <span class="challenge-desc">{% block description %}{{ challenge.html }}{% endblock %}</span>
+            </div>
+          </div>
 
             {% if challenge.connection_info %}
               <div class="mb-2">
@@ -89,7 +102,6 @@ CHALLENGE_CONTENT = '''
                 </span>
               </div>
             {% endif %}
-            <button id=\"make-ticket-btn\">make ticket</button>
             {% if hints %}
               <div class="challenge-hints hint-row row">
                 <div class="col-12 mb-3">
