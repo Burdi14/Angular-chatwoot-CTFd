@@ -89,7 +89,6 @@ def load(app):
         if ticket_ref is None:
             token, session = create_ticket()
             ticket_ref = TicketRef(
-                id=uuid4().hex,
                 user_id=user.id,
                 source_id=token,
                 session=session
