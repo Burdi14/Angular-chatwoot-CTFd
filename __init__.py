@@ -6,7 +6,7 @@ from CTFd.models import db
 from CTFd.utils.user import get_current_user
 from CTFd.plugins.migrations import upgrade
 from CTFd.plugins import override_template, register_user_page_menu_bar
-from CTFd.plugins.chatwoot.template_challenge import CHALLENGES_CONTENT
+from CTFd.plugins.chatwoot.template_challenge import CHALLENGE_CONTENT
 
 class TicketRef(db.Model):
     __tablename__ = 'ticket_refs'
@@ -118,6 +118,6 @@ def load(app):
       <!-- Можно добавить остальной контент задач здесь -->
     {% endblock %}
     """
-    override_template('challenge.html', CHALLENGES_CONTENT)
+    override_template('challenge.html', CHALLENGE_CONTENT)
 
     register_user_page_menu_bar("VIBECODE", "/chat")

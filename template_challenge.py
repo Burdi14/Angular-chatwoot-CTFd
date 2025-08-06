@@ -1,4 +1,4 @@
-CHALLENGES_CONTENT = '''
+CHALLENGE_CONTENT = '''
 <div :class="getStyles()" role="document" x-data="Challenge" x-init="id = {{ challenge.id }}; max_attempts = {{ max_attempts }}; attempts = {{ attempts }}">
   <div class="modal-content">
     <div class="modal-body py-4 px-4 px-sm-5">
@@ -147,7 +147,17 @@ CHALLENGES_CONTENT = '''
                 <span x-text="attempts"></span>/<span x-text="max_attempts"></span> {% trans c=max_attempts %}attempt{% pluralize %}attempts{% endtrans %}
               </p>
             </template>
-
+            <div class="row mt-4">
+              <div class="col-12 col-sm-4 offset-sm-8">
+                <button
+                  id="make-ticket-btn"
+                  class="btn btn-outline-info w-100"
+                  type="button"
+                >
+                  Ask question
+                </button>
+              </div>
+            </div>
             <div class="row submit-row">
               <div class="col-12 col-sm-8">
                 {% block input %}
