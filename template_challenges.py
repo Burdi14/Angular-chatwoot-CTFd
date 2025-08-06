@@ -1,5 +1,5 @@
 CHALLENGES_CONTENT = '''
-{% extends "challenges.html" %}
+{% extends "base.html" %}
 
 {% block content %}
   <div class="jumbotron">
