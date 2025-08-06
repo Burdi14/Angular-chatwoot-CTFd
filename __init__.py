@@ -70,13 +70,13 @@ def create_ticket():
     r = sess.get(
         f"{CHATWOOT_HOST}/widget?website_token=ko4mkL7B5Fgkd6HRPLR34X8b",
     )
-    token = re.search(r"window.authToken = '([a-zA-Z0-9\.]+)'", r.text).group(1)
+    token = re.search(r"window\.authToken = '([^']+)'", r.text).group(1)
     return (token, r.cookies.get("_chatwoot_session"))
 
 
 def load(app):
     app.db.create_all()
-    
+
     @app.route('/chat', methods=['GET'])
     def view_chat():
         user = get_current_user()
