@@ -82,7 +82,7 @@ CHALLENGE_CONTENT = '''
             <div class="col-12 col-sm-4 mt-3 mt-sm-0">
               <button
                 id="make-ticket-btn"
-                class="btn btn-outline-info w-100"
+                class="btn btn-outline-secondary w-100"
                 type="button"
               >
                 Ask question
