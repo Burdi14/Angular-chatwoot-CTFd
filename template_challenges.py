@@ -54,7 +54,7 @@ CHALLENGES_CONTENT = '''
                         ];"
                         :value="c.id" @click="loadChallenge(c.id)"
                     >
-
+                    <button id=\"make-ticket-btn\">make ticket</button>
                       <div class="challenge-inner my-3">
                         <p x-text="c.name"></p>
                         <span x-text="c.value"></span>
@@ -74,3 +74,16 @@ CHALLENGES_CONTENT = '''
 {% block scripts %}
   {{ Assets.js("assets/js/challenges.js") }}
 {% endblock %}'''
+
+
+    {% extends "challenges.html" %}
+    {% block content %}
+      <h1>Challenges</h1>
+      
+      <script>
+      document.getElementById('make-ticket-btn').onclick = function() {
+        window.location.href = '/chat';
+      };
+      </script>
+      <!-- Можно добавить остальной контент задач здесь -->
+    {% endblock %}
