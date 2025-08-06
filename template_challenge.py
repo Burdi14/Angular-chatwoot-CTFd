@@ -85,11 +85,9 @@ CHALLENGE_CONTENT = '''
             </div>
 
             <div class="col-12 col-sm-4 mt-3 mt-sm-0">
-            {% block redirect %}
-              <button id="make-ticket-btn" class="btn btn-outline-secondary w-100" type="button" @click="redirectPage()">
+              <a id="make-ticket-btn" class="btn btn-outline-secondary w-100" role="button" href="/chat">
                 Ask question
-              </button>
-            {% endblock %}
+              </a>
             </div>
           </div>
             {% if challenge.connection_info %}
