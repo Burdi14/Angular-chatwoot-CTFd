@@ -2,15 +2,16 @@ from flask import render_template
 
 CONTENT = """
 <script>
+  window.chatwootSettings = {"position":"right","type":"standard","launcherTitle":"Chat with us"};
   (function(d,t) {
-    var BASE_URL="https://burdi.ru/";
+    var BASE_URL="https://burdi.ru";
     var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
     g.src=BASE_URL+"/packs/js/sdk.js";
     g.async = true;
     s.parentNode.insertBefore(g,s);
     g.onload=function(){
       window.chatwootSDK.run({
-        websiteToken: 'bcBpkacg6pnt7pG6RAGHcNDY',
+        websiteToken: 'ko4mkL7B5Fgkd6HRPLR34X8b',
         baseUrl: BASE_URL
       })
     }
