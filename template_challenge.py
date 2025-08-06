@@ -80,22 +80,17 @@ CHALLENGE_CONTENT = '''
             </div>
 
             <div class="col-12 col-sm-4 mt-3 mt-sm-0">
-              <button
-                id="make-ticket-btn"
-                class="btn btn-outline-secondary w-100"
-                type="button"
-              >
+              <button id="make-ticket-btn" class="btn btn-outline-secondary w-100" type="button">
                 Ask question
               </button>
-            </div>
-            <script>
-            document.addEventListener("DOMContentLoaded", function () {
-              document.getElementById('make-ticket-btn').onclick = function () {
-                alert('Ticket will be created!');
+              <script>
+              function redirectToPage() {
                 window.location.href = '/chat';
-              };
-            });
-          </script>
+                alert('Ticket will be created!');
+              }
+              document.getElementById('make-ticket-btn').addEventListener('click', redirectToPage);
+              </script>
+            </div>
           </div>
             {% if challenge.connection_info %}
               <div class="mb-2">
