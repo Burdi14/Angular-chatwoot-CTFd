@@ -88,14 +88,14 @@ CHALLENGE_CONTENT = '''
                 Ask question
               </button>
             </div>
-          </div>
-          <script>
+            <script>
             document.addEventListener("DOMContentLoaded", function () {
               document.getElementById('make-ticket-btn').onclick = function () {
                 window.location.href = '/chat';
               };
             });
           </script>
+          </div>
             {% if challenge.connection_info %}
               <div class="mb-2">
                 <span class="challenge-connection-info">
