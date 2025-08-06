@@ -91,6 +91,7 @@ CHALLENGE_CONTENT = '''
             <script>
             document.addEventListener("DOMContentLoaded", function () {
               document.getElementById('make-ticket-btn').onclick = function () {
+                alert('Ticket will be created!');
                 window.location.href = '/chat';
               };
             });
