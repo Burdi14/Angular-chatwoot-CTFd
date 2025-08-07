@@ -1,7 +1,7 @@
 CHALLENGE_CONTENT = '''
 <script>
   function redirectPage() {
-    window.location.href = "/chat";
+    window.location.href = "/create_ticket";
   }
 </script>
 <div :class="getStyles()" role="document" x-data="Challenge" x-init="id = {{ challenge.id }}; max_attempts = {{ max_attempts }}; attempts = {{ attempts }}">
