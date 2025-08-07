@@ -1,6 +1,6 @@
 import re
 from uuid import uuid4
-from flask import make_response, render_template
+from flask import make_response, redirect, render_template, request, url_for
 import requests
 from CTFd.cli import get_config
 from CTFd.models import db
@@ -23,25 +23,6 @@ class TicketRef(db.Model):
 CHATWOOT_HOST = "https://chatwoot.burdi.ru"
 CHATWOOT_WEBSITE_TOKEN = "ko4mkL7B5Fgkd6HRPLR34X8b"
 
-# example
-# curl 'https://burdi.ru/api/v1/widget/contact?website_token=ko4mkL7B5Fgkd6HRPLR34X8b' \
-#   -H 'Accept: application/json, text/plain, */*' \
-#   -H 'Accept-Language: en-GB,en-US;q=0.9,en;q=0.8,ru;q=0.7,ja;q=0.6,ar;q=0.5' \
-#   -H 'Cache-Control: no-cache' \
-#   -H 'Connection: keep-alive' \
-#   -H 'Pragma: no-cache' \
-#   -H 'Referer: https://burdi.ru/widget?website_token=ko4mkL7B5Fgkd6HRPLR34X8b' \
-#   -H 'Sec-Fetch-Dest: empty' \
-#   -H 'Sec-Fetch-Mode: cors' \
-#   -H 'Sec-Fetch-Site: same-origin' \
-#   -H 'Sec-Fetch-Storage-Access: active' \
-#   -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36' \
-#   -H 'X-Auth-Token: eyJhbGciOiJIUzI1NiJ9.eyJzb3VyY2VfaWQiOiIzOTM4Mzk0ZC1jZGRmLTQ1YWQtYWZkMi04YmU5NmRjN2E1YmIiLCJpbmJveF9pZCI6MX0.mGc4Qx4pcZxeidHQm0oOEDLynHqB60nYDMh8GTtLSyU' \
-#   -H 'sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"' \
-#   -H 'sec-ch-ua-mobile: ?0' \
-#   -H 'sec-ch-ua-platform: "Windows"'
-
-
 def load(app):
     app.db.create_all()
 
@@ -54,8 +35,8 @@ def load(app):
         token = re.search(r"authToken = '([^']+)'", r.text).group(1)
         return token
 
-    @app.route('/chat', methods=['GET'])
-    def view_chat():
+    @app.route('/view_ticket/<int:ticket_id>', methods=['GET'])
+    def view_chat(ticket_id):
         TEMPLATE = 'plugins/chatwoot/assets/chat.html'
 
         user = get_current_user()
@@ -64,26 +45,51 @@ def load(app):
         if user is None:
             return render_template(TEMPLATE, user=user)
 
-        # find tickets belonging to a user which has the same team
         filter_query = TicketRef.user.has(team_id=team.id) if team is not None else TicketRef.user == user
         ticket_refs = TicketRef.query.filter(filter_query).all()
 
-        ticket_ref = ticket_refs[0] if ticket_refs else None
+        if not ticket_refs: 
+            return "Not found", 404
+        
+        ticket_ref = next(x for x in ticket_refs if x.id == ticket_id)
 
-        if ticket_ref is None:
-            token = create_ticket()
-            ticket_ref = TicketRef(
-                user=user,
-                token=token
-            )
-            db.session.add(ticket_ref)
-            db.session.commit()
-
-        response = make_response(render_template(TEMPLATE, user=user, chatwoot_host=CHATWOOT_HOST, chatwoot_website_token=CHATWOOT_WEBSITE_TOKEN))
+        response = make_response(render_template(TEMPLATE, user=user, tickets=ticket_refs, chatwoot_host=CHATWOOT_HOST, chatwoot_website_token=CHATWOOT_WEBSITE_TOKEN))
 
         response.set_cookie('cw_conversation', ticket_ref.token)
 
         return response
+
+    @app.route('/tickets', methods=['GET'])
+    def view_tickets():
+        TEMPLATE = 'plugins/chatwoot/assets/tickets.html'
+
+        user = get_current_user()
+        if user is None:
+            return render_template(TEMPLATE, user=user)
+        
+        team = user.team if user is not None else None
+
+        filter_query = TicketRef.user.has(team_id=team.id) if team is not None else TicketRef.user == user
+        ticket_refs = TicketRef.query.filter(filter_query).all()
+
+        return render_template(TEMPLATE, user=user, tickets=ticket_refs)
+
+    @app.route('/create_ticket', methods=['GET'])
+    def create_ticket_route():
+        user = get_current_user()
+        if user is None:
+            return redirect(url_for("auth.login", next=request.full_path))
+
+        token = create_ticket()
+        ticket_ref = TicketRef(
+            user=user,
+            token=token
+        )
+        db.session.add(ticket_ref)
+        db.session.commit()
+
+        return redirect(url_for('view_chat', ticket_id=ticket_ref.id))
+
 
     upgrade(plugin_name="chatwoot")
     register_plugin_assets_directory(
@@ -91,4 +97,4 @@ def load(app):
     )
     override_template('challenge.html', CHALLENGE_CONTENT)
 
-    register_user_page_menu_bar("VIBECODE", "/chat")
+    register_user_page_menu_bar("VIBECODE", "/tickets")
