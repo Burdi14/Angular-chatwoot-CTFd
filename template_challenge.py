@@ -85,7 +85,7 @@ CHALLENGE_CONTENT = '''
             </div>
 
             <div class="col-12 col-sm-4 mt-3 mt-sm-0">
-              <a id="make-ticket-btn" class="btn btn-outline-secondary w-100" role="button" href="/chat">
+              <a id="make-ticket-btn" class="btn btn-outline-secondary w-100" role="button" href="/create_ticket">
                 Ask question
               </a>
             </div>
