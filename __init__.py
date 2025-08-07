@@ -29,7 +29,7 @@ def load(app):
     def create_ticket():
         sess = requests.Session()
         r = sess.get(
-            f"{CHATWOOT_HOST}/widget?website_token=ko4mkL7B5Fgkd6HRPLR34X8b",
+            f"{CHATWOOT_HOST}/widget?website_token={CHATWOOT_WEBSITE_TOKEN}",
         )
 
         token = re.search(r"authToken = '([^']+)'", r.text).group(1)
