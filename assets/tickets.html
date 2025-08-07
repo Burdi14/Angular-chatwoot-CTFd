@@ -4,12 +4,12 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h1>Chat with Support</h1>
+            <h1>Chat with Support{% if ticket_ref %}: Ticket №{{ ticket_ref.id }} {% endif %}</h1>
             {% if user %}
                 <p>Welcome, {{ user.name }}!</p>
                 {% for ticket in tickets %}
                     <div class="ticket">
-                        <a href="{{ url_for('view_chat', ticket_id=ticket.id) }}">Ticket #{{ ticket.id }}</a>
+                        <a href="{{ url_for('view_chat', ticket_id=ticket.id) }}">Ticket №{{ ticket.id }}</a>
                     </div>
                 {% endfor %}
                 {% if not tickets %}

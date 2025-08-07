@@ -53,7 +53,7 @@ def load(app):
         
         ticket_ref = next(x for x in ticket_refs if x.id == ticket_id)
 
-        response = make_response(render_template(TEMPLATE, user=user, tickets=ticket_refs, chatwoot_host=CHATWOOT_HOST, chatwoot_website_token=CHATWOOT_WEBSITE_TOKEN))
+        response = make_response(render_template(TEMPLATE, ticket_ref=ticket_ref, user=user, tickets=ticket_refs, chatwoot_host=CHATWOOT_HOST, chatwoot_website_token=CHATWOOT_WEBSITE_TOKEN))
 
         response.set_cookie('cw_conversation', ticket_ref.token)
 
