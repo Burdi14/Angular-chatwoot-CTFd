@@ -97,4 +97,4 @@ def load(app):
     )
     override_template('challenge.html', CHALLENGE_CONTENT)
 
-    register_user_page_menu_bar("VIBECODE", "/tickets")
+    register_user_page_menu_bar("Tickets", "/tickets")
